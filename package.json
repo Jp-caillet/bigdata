@@ -1,0 +1,25 @@
+{
+  "name": "big_data",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^2.6.1",
+    "csv-split-stream": "^1.0.2",
+    "csv-stream": "^0.2.0",
+    "csvtojson": "^2.0.8",
+    "fast-csv": "^2.4.1",
+    "mongodb": "^3.2.3",
+    "mongoose": "^5.4.2",
+    "mz": "^2.7.0",
+    "pm2": "^3.2.5",
+    "shelljs": "^0.8.3",
+    "stream-to-iterator": "^3.0.2-0",
+    "through2": "^3.0.0"
+  }
+}
