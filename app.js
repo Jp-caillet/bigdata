@@ -11,31 +11,53 @@ pm2.connect( function(err) {
            console.log(err);
            process.exit(2);
         }
-     });
-
-for(let i = 0 ; i<5 ; i++){
-   if(lsread[i] != ".DS_Store"){
+     
       
-    pm2.start({
-        script: 'savetomongo.js'
+pm2.start({
+        script: 'savetomongo.js',
+        instances: 4
      }, function(err, apps) {
         
-        pm2.sendDataToProcessId({
-         type: 'process:msg',
-         data: lsread[i],
-         topic: 'toto',
-         id: i
-      }, function(err, res) {
-         if (err) console.log(res);
-    });
+
      });
       
-  }
-}
+  
+
 
 pm2.launchBus((err, bus) => {
       bus.on('process:msg', (packet) => {
-      console.log('end: '+ packet.process.pm_id) 
-        pm2.delete(packet.process.pm_id)
+        console.log("ca passe par la")
+        if(!packet.data.ended){
+          if(lsread[0] == ".DS_Store"){
+          lsread.shift()
+        }
+        pm2.sendDataToProcessId(packet.process.pm_id ,{
+         type: 'process:msg',
+         data: lsread[0],
+         topic: 'toto',
+         id: i
+        }, function(err, res) {
+         if (err) console.log(res);
+         lsread.shift()
+        })
+      }     
+      
      })
+      bus.on('process:end', (packet) => {
+      console.log("end")
+      console.log('end: '+ packet.process.pm_id) 
+      pm2.sendDataToProcessId(packet.process.pm_id ,{
+         type: 'process:msg',
+         data: lsread[0],
+         topic: 'toto',
+         id: i
+        }, function(err, res) {
+         if (err) console.log(res);
+         lsread.shift()
+        })
+      //pm2.delete(packet.process.pm_id)
     })
+    })
+
+});
+
